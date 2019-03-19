@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+
+</head>
+
+<body>
+
+    <div id="app">
+        <template>
+            <el-table :data="tableData" border style="width: 100%">
+
+                <el-table-column v-for="(values, key) in fields" :prop="key" :label="values[0]" :width="values[1]">
+                    <template slot-scope="{row, $index}">
+                        <el-input class="edit-cell" v-if="row.edit" v-model="row[key]"></el-input>
+                        <span v-if="!row.edit">{{ row[key] }}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="290">
+                    <template slot-scope="{row, $index}">
+                        <span>
+                            <el-button type="primary" size="mini" v-show="!row.edit"
+                                @click="handleEdit($index, row)">编辑
+                            </el-button>
+                        </span>
+                        <span>
+                            <el-button type="primary" size="mini" v-show="row.edit"
+                                @click="handleSave($index, row)">保存
+                            </el-button>
+                        </span>
+                        <el-button type="success" size="mini" @click="handleAdd($index, row)">新增
+                        </el-button>
+                        <span>
+                            <el-button type="danger" size="mini" @click="handleDelete($index, row)">删除
+                            </el-button>
+                        </span>
+
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            methods: {
+                handleEdit(index, row) {
+                    this.tableData[index].edit = true
+                },
+                handleSave(index, row) {
+                    this.tableData[index].edit = false
+                },
+                handleAdd(index, row) {
+                    let data = {}
+                    Object.keys(this.fields).forEach(function(key){
+                        data[key] = ''
+                    })
+                    this.tableData.splice(index + 1, 0, data)
+                    this.handleEdit(index + 1, row)
+                },
+                handleDelete(index, row) {
+                    this.tableData.splice(index, 1)
+                }
+            },
+            data: {
+                fields: {
+                    date: ['日期', 150],
+                    name: ['姓名', 120],
+                    province: ['省份', 120],
+                    city: ['市区', 120],
+                    address: ['地址', 230],
+                    zip: ['邮编', 120],
+                },
+                tableData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    province: '上海',
+                    city: '普陀区',
+                    address: '上海市普陀区金沙江路 1518 弄',
+                    zip: 200333,
+                    edit: false
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    province: '上海',
+                    city: '普陀区',
+                    address: '上海市普陀区金沙江路 1517 弄',
+                    zip: 200333,
+                    edit: false
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    province: '上海',
+                    city: '普陀区',
+                    address: '上海市普陀区金沙江路 1519 弄',
+                    zip: 200333,
+                    edit: false
+                }, {
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    province: '上海',
+                    city: '普陀区',
+                    address: '上海市普陀区金沙江路 1516 弄',
+                    zip: 200333,
+                    edit: false
+                }]
+            }
+
+        })
+    </script>
+
+    <style>
+        #app {
+            border: 1px solid #F00;
+            width: 60%;
+            height: 100%;
+            vertical-align: middle;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        ;
+    </style>
+
+</body>
+
+</html>
